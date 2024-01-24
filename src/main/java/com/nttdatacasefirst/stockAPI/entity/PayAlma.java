@@ -12,4 +12,48 @@ public class PayAlma {
     @ManyToOne
     private HisseSenedi hissePayAlma;
     private boolean isUsed;
+
+    //Constructor - Getter - Setter - ToString
+
+    protected PayAlma() {
+
+    }
+
+    public PayAlma(int kupurNo, boolean isUsed) {
+        this.kupurNo = kupurNo;
+        this.isUsed = isUsed;
+    }
+
+    public int getKupurNo() {
+        return kupurNo;
+    }
+
+    public void setKupurNo(int kupurNo) {
+        this.kupurNo = kupurNo;
+    }
+
+    public HisseSenedi getHissePayAlma() {
+        return hissePayAlma;
+    }
+
+    public void setHissePayAlma(HisseSenedi hissePayAlma) {
+        this.hissePayAlma = hissePayAlma;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    public void setUsed(boolean used) {
+        isUsed = used;
+    }
+
+    @Override
+    public String toString() {
+        return "PayAlma{" +
+                "kupurNo=" + kupurNo +
+                ", hissePayAlma=" + hissePayAlma +
+                ", isUsed=" + isUsed +
+                '}';
+    }
 }
