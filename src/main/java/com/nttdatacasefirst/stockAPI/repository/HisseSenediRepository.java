@@ -1,7 +1,9 @@
 package com.nttdatacasefirst.stockAPI.repository;
 
-import com.nttdatacasefirst.stockAPI.entity.HisseSenedi;
+import com.nttdatacasefirst.stockAPI.entity.Stock;
+import org.springframework.stereotype.Repository;
 
-public interface HisseSenediRepository extends BaseRepository<HisseSenedi>{
+@Repository
+public interface HisseSenediRepository extends BaseRepository<Stock>{
 
 }

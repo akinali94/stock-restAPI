@@ -1,7 +1,9 @@
 package com.nttdatacasefirst.stockAPI.repository;
 
-import com.nttdatacasefirst.stockAPI.entity.Hissedar;
+import com.nttdatacasefirst.stockAPI.entity.ShareHolder;
+import org.springframework.stereotype.Repository;
 
-public interface HissedarRepository extends BaseRepository<Hissedar> {
+@Repository
+public interface HissedarRepository extends BaseRepository<ShareHolder> {
 
 }
