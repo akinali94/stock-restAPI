@@ -1,11 +1,19 @@
 package com.nttdatacasefirst.stockAPI.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.NumberFormat;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Stock {
     @Id
     @GeneratedValue
@@ -22,7 +30,6 @@ public class Stock {
     private List<Coupon> couponList;
 
     @ManyToOne
-    @JoinColumn(nullable = true)
     private ShareHolder shareHolder;
 
 }
