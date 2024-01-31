@@ -18,12 +18,12 @@ import java.util.Date;
 public class Process {
     @Id
     @GeneratedValue
-    private int Id;
+    private Long Id;
     @Convert(converter = ProcessTypeConverter.class)
     private ProcessType processType;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private CapitalIncrease capitalIncrease;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Coupon coupon;
     private Date date;
     private int dividentRate; //kar payi dagitim orani/ Baslangicta belirlenir

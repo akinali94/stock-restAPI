@@ -17,8 +17,8 @@ import java.util.List;
 public class Stock {
     @Id
     @GeneratedValue
-    private int Id;
-    @ManyToOne
+    private Long Id;
+    @ManyToOne(fetch = FetchType.LAZY)
     private CapitalIncrease capitalIncrease;
     private int serialNo; //seri no
 
@@ -29,7 +29,7 @@ public class Stock {
     @OneToMany(mappedBy ="stockNo")
     private List<Coupon> couponList;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ShareHolder shareHolder;
 
 }

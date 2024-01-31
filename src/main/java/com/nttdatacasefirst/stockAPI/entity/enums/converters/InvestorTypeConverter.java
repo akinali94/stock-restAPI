@@ -7,16 +7,16 @@ import jakarta.persistence.Converter;
 import java.util.Objects;
 
 @Converter(autoApply = true)
-public class InvestorTypeConverter implements AttributeConverter<InvestorType, Integer> {
+public class InvestorTypeConverter implements AttributeConverter<InvestorType, Long> {
     @Override
-    public Integer convertToDatabaseColumn(InvestorType attribute) {
+    public Long convertToDatabaseColumn(InvestorType attribute) {
         if(attribute == null)
             return null;
         return attribute.getValue();
     }
 
     @Override
-    public InvestorType convertToEntityAttribute(Integer dbData) {
+    public InvestorType convertToEntityAttribute(Long dbData) {
         if(dbData == null)
             return null;
         for(InvestorType investor: InvestorType.values()){

@@ -19,7 +19,7 @@ public class Coupon {
 
     @Id
     @GeneratedValue
-    private int Id;
+    private Long Id;
 /*    @ManyToOne
     private CapitalIncrease arrangementNo;*/
     @Convert(converter = CouponTypeConverter.class)
@@ -27,8 +27,8 @@ public class Coupon {
     private int arrangementNo; //Sermaye artisindan gelecek.
     private int clippingNo; //kupur numarasi - pay alma
     private int yearNo; //kar payi kuponu
-    private boolean isUsed;
-    @ManyToOne
+    private boolean used;
+    @ManyToOne(fetch = FetchType.LAZY)
     private Stock stockNo;
     @OneToMany(mappedBy = "coupon")
     private List<Process> processList;

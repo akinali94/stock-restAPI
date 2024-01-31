@@ -18,7 +18,7 @@ import java.util.List;
 public class ShareHolder {
     @Id
     @Column(length = 8, unique = true)
-    private String registorNo; //sicilNo
+    private Long registorNo; //sicilNo
     private String title; //unvan
     private String address;
     private String phoneNo;

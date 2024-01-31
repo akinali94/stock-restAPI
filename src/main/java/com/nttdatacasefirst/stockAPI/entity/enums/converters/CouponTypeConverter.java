@@ -7,9 +7,9 @@ import jakarta.persistence.Converter;
 import java.util.Objects;
 
 @Converter(autoApply = true)
-public class CouponTypeConverter implements AttributeConverter<CouponType, Integer> {
+public class CouponTypeConverter implements AttributeConverter<CouponType, Long> {
     @Override
-    public Integer convertToDatabaseColumn(CouponType attribute) {
+    public Long convertToDatabaseColumn(CouponType attribute) {
         if(attribute == null ){
             return null;
         }
@@ -17,7 +17,7 @@ public class CouponTypeConverter implements AttributeConverter<CouponType, Integ
     }
 
     @Override
-    public CouponType convertToEntityAttribute(Integer dbData) {
+    public CouponType convertToEntityAttribute(Long dbData) {
         if(dbData == null)
             return null;
         for(CouponType cType : CouponType.values()){

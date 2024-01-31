@@ -16,7 +16,7 @@ import java.util.List;
 public class CapitalIncrease {
     @Id
     @GeneratedValue
-    private int arrangementNo; //Tertip numarasi
+    private Long arrangementNo; //Tertip numarasi
     private int year;
     private int rightIssue; //bedelli sermaye arttirimi
     private int bonusIssue; //bedelsiz sermaye artirimi
@@ -29,6 +29,4 @@ public class CapitalIncrease {
     private List<Coupon> couponList;*/
     @OneToMany(mappedBy = "capitalIncrease")
     private List<Process> processList;
-
-
 }

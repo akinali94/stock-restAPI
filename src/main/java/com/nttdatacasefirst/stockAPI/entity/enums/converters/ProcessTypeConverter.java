@@ -8,16 +8,16 @@ import jakarta.persistence.Converter;
 import java.util.Objects;
 
 @Converter(autoApply = true)
-public class ProcessTypeConverter implements AttributeConverter<ProcessType, Integer> {
+public class ProcessTypeConverter implements AttributeConverter<ProcessType, Long> {
     @Override
-    public Integer convertToDatabaseColumn(ProcessType attribute) {
+    public Long convertToDatabaseColumn(ProcessType attribute) {
         if(attribute == null)
             return null;
         return attribute.getValue();
     }
 
     @Override
-    public ProcessType convertToEntityAttribute(Integer dbData) {
+    public ProcessType convertToEntityAttribute(Long dbData) {
         if(dbData == null)
             return null;
         for(ProcessType process : ProcessType.values()){
