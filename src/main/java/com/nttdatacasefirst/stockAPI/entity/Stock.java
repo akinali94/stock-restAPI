@@ -1,12 +1,14 @@
 package com.nttdatacasefirst.stockAPI.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.NumberFormat;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -22,9 +24,8 @@ public class Stock {
     private CapitalIncrease capitalIncrease;
     private int serialNo; //seri no
 
-    //@Column(precision = 10, scale = 2)
-    @NumberFormat(pattern = "#.##")
-    private double nominalValue; //nominal deger
+    @Digits(integer = 15, fraction = 2)
+    private BigDecimal nominalValue; //nominal deger
 
     @OneToMany(mappedBy ="stockNo")
     private List<Coupon> couponList;

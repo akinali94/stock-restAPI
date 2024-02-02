@@ -21,7 +21,9 @@ public class ShareholderServiceImpl implements ShareholderService {
     private final ShareholderRepository repositoryShareholder;
     private final MapperShareholder mapperShareholder;
 
-    public ShareholderServiceImpl(@Autowired ShareholderRepository repositoryShareholder, @Autowired MapperShareholder mapperShareholder){
+    public ShareholderServiceImpl(@Autowired ShareholderRepository repositoryShareholder,
+                                  @Autowired MapperShareholder mapperShareholder){
+
         this.repositoryShareholder = repositoryShareholder;
         this.mapperShareholder = mapperShareholder;
     }
@@ -34,7 +36,9 @@ public class ShareholderServiceImpl implements ShareholderService {
 
         ShareHolder newShareholder = mapperShareholder.toAdd(addModel);
 
-        return mapperShareholder.toModelGet(repositoryShareholder.save(newShareholder));
+        repositoryShareholder.save(newShareholder);
+
+        return mapperShareholder.toModelGet(newShareholder);
     }
 
     @Override
@@ -47,7 +51,9 @@ public class ShareholderServiceImpl implements ShareholderService {
 
         ShareHolder updatedShareholder = mapperShareholder.toUpdate(updateModel);
 
-        return mapperShareholder.toModelGet(repositoryShareholder.save(updatedShareholder));
+        repositoryShareholder.save(updatedShareholder);
+
+        return mapperShareholder.toModelGet(updatedShareholder);
     }
 
     @Override
@@ -89,6 +95,7 @@ public class ShareholderServiceImpl implements ShareholderService {
         ShareHolder getShareholder = repositoryShareholder.findShareHolderByTitle(title);
         if(getShareholder == null)
             throw new ShareholderNotFoundException("There is no Shareholder");
+
         return mapperShareholder.toModelGet(getShareholder);
     }
 
@@ -97,6 +104,7 @@ public class ShareholderServiceImpl implements ShareholderService {
         ShareHolder getShareholder = repositoryShareholder.findShareHolderByAddress(address);
         if(getShareholder == null)
             throw new ShareholderNotFoundException("There is no Shareholder");
+
         return mapperShareholder.toModelGet(getShareholder);
     }
 

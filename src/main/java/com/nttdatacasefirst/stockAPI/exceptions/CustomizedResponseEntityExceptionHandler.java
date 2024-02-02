@@ -41,6 +41,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
     }
 
+    @ExceptionHandler(ShareholderAlreadyExistException.class)
     public final ResponseEntity<ErrorDetails> handleShareholderAlreadyExistException(Exception ex, WebRequest request)
             throws Exception{
 
@@ -52,6 +53,45 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
         return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.BAD_REQUEST);
 
+    }
+
+    @ExceptionHandler(CapitalIncreaseNotFoundException.class)
+    public final ResponseEntity<ErrorDetails> handleCapitalIncreaseNotFoundException(Exception ex, WebRequest request)
+        throws Exception{
+
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(StockNotFoundException.class)
+    public final ResponseEntity<ErrorDetails> handleStockNotFoundException(Exception ex, WebRequest request)
+        throws Exception{
+
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CapitalIncreaseIsNotEnoughException.class)
+    public final ResponseEntity<ErrorDetails> handleCapitalIncreaseNotEnoughException(Exception ex, WebRequest request)
+        throws Exception{
+
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
     protected ResponseEntity<Object> handleMethodArgumentNotValid(

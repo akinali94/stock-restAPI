@@ -24,14 +24,4 @@ public class Mapper{
 
         return newProcess;
     }
-    public CapitalIncrease toCapitalIncrease(CapitalIncreaseAddModel addModel){
-        CapitalIncrease newCapitalIncrease = new CapitalIncrease();
-
-        newCapitalIncrease.setYear(addModel.getYear());
-        newCapitalIncrease.setRightIssue(addModel.getRightIssue());
-        newCapitalIncrease.setBonusIssue(addModel.getBonusIssue());
-        newCapitalIncrease.setIncreasingRate(addModel.getIncreasingRate());
-
-        return newCapitalIncrease;
-    }
 }

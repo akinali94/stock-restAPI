@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CouponRepository extends BaseRepository<Coupon>{
 
-    List<Coupon> findByArrangementNo(int arrNo);
+    List<Coupon> findByArrangementNo(Long arrNo);
     List<Coupon> findByType(CouponType type);
     List<Coupon> findByYearNo(int yearNo);
     List<Coupon> findByStockNo_SerialNo(int serial);

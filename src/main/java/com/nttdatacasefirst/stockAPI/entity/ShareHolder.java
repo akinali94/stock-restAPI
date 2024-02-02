@@ -3,6 +3,7 @@ package com.nttdatacasefirst.stockAPI.entity;
 import com.nttdatacasefirst.stockAPI.entity.enums.InvestorType;
 import com.nttdatacasefirst.stockAPI.entity.enums.converters.InvestorTypeConverter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class ShareHolder {
     private Long registorNo; //sicilNo
     private String title; //unvan
     private String address;
+    @Pattern(regexp = "[0-9\\s]{12}")
     private String phoneNo;
     @Convert(converter = InvestorTypeConverter.class)
     private InvestorType investorType;

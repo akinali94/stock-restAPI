@@ -12,11 +12,14 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CapitalIncreaseAddModel {
+public class CapitalIncreaseGetModel {
+    private Long arrangementNo;
+    private int year;
     @Digits(integer = 15, fraction = 2)
     private BigDecimal rightIssue;
     @Digits(integer = 15, fraction = 2)
     private BigDecimal bonusIssue;
     private byte increasingRate;
-
+    @Digits(integer = 15, fraction = 2)
+    private BigDecimal capitalValue;
 }

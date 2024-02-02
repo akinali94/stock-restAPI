@@ -24,7 +24,7 @@ public class Coupon {
     private CapitalIncrease arrangementNo;*/
     @Convert(converter = CouponTypeConverter.class)
     private CouponType type;
-    private int arrangementNo; //Sermaye artisindan gelecek.
+    private Long arrangementNo; //Sermaye artisindan gelecek.
     private int clippingNo; //kupur numarasi - pay alma
     private int yearNo; //kar payi kuponu
     private boolean used;
