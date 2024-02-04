@@ -144,4 +144,10 @@ public class ShareholderServiceImpl implements ShareholderService {
         return mapperShareholder.toModelGetList(getShareholder);
     }
 
+    @Override
+    public ShareHolder getShareholderForOperations(String regNo) {
+        return repositoryShareholder.findById(Long.parseLong(regNo))
+                .orElseThrow(() -> new ShareholderNotFoundException("Shareholder Not Found"));
+    }
+
 }

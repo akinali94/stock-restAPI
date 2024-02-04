@@ -32,23 +32,30 @@ public class CapitalIncreaseServiceImpl implements CapitalIncreaseService {
     @Override
     public CapitalIncreaseGetModel addCapitalIncrease(CapitalIncreaseAddModel addModel) {
 
+        //Mapped Model to Entity
         CapitalIncrease createdCapital = mapperCapitalIncrease.toAdd(addModel);
 
-        Optional<CapitalIncrease> lastCapital = repositoryCapitalIncrease.findAll().stream()
+        //Get Last CapitalIncrease to get capitalValue
+        Optional<CapitalIncrease> getLastCapital = repositoryCapitalIncrease.findAll().stream()
                 .max(Comparator.comparing(CapitalIncrease::getCapitalValue));
-                //.sorted(Comparator.comparing(CapitalIncrease::getCapitalValue).reversed()).findFirst();
 
-        BigDecimal capitalValue = addModel.getRightIssue().add(addModel.getBonusIssue())
-                                                            .add(lastCapital.get().getCapitalValue());
+        //Assign Capital Value
+        BigDecimal capitalValue = getLastCapital.map(capitalIncrease -> addModel.getRightIssue().add(addModel.getBonusIssue())
+                .add(capitalIncrease.getCapitalValue()))
+                .orElseGet(() -> addModel.getRightIssue().add(addModel.getBonusIssue()));
 
-        createdCapital.setResidualValue(new BigDecimal(0));
         createdCapital.setCapitalValue(capitalValue);
+
+        //Assign residaulValue to control Stock production
+        createdCapital.setResidualValue(new BigDecimal(0));
+
+        //Assign year of CapitalIncrease
         createdCapital.setYear(Year.now().getValue());
 
-
+        //Save to repo
         repositoryCapitalIncrease.save(createdCapital);
 
-        //Problem, maplenen database'den gelmiyor. O yuzden arrangement'i olmayacak.
+        //Problem: donen Model, repodan donmuyor.
 
         return mapperCapitalIncrease.toModelGet(createdCapital);
     }

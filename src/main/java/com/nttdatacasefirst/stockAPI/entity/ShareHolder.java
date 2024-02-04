@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ShareHolder {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 8, unique = true)
     private Long registorNo; //sicilNo
     private String title; //unvan
@@ -28,5 +29,7 @@ public class ShareHolder {
     private InvestorType investorType;
     @OneToMany(mappedBy = "shareHolder")
     private List<Stock> stockList;
+    @OneToMany(mappedBy = "shareHolder")
+    private List<Operation> operationList;
 
 }

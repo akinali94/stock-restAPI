@@ -17,6 +17,6 @@ public class CapitalIncreaseAddModel {
     private BigDecimal rightIssue;
     @Digits(integer = 15, fraction = 2)
     private BigDecimal bonusIssue;
-    private byte increasingRate;
+    private int increasingRate;
 
 }

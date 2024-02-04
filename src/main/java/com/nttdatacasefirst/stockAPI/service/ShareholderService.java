@@ -1,6 +1,7 @@
 package com.nttdatacasefirst.stockAPI.service;
 
 import com.nttdatacasefirst.stockAPI.dtos.*;
+import com.nttdatacasefirst.stockAPI.entity.ShareHolder;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface ShareholderService {
     List<ShareholderGetModel> findByInvestorType(String investorType);
     List<ShareholderGetModel> haveStock();
     List<ShareholderGetModel> haveNotStock();
+
+    ShareHolder getShareholderForOperations(String regNo);
 }

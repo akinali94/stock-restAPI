@@ -16,7 +16,7 @@ public class MapperStockImpl implements MapperStock {
     public Stock toAdd(StockAddModel addModel) {
         Stock newStock = new Stock();
         newStock.setNominalValue(addModel.getNominalValue());
-        newStock.setCapitalIncrease(addModel.getCapitalIncrease());
+        newStock.getCapitalIncrease().setArrangementNo(Long.parseLong(addModel.getCapitalIncreaseArrNo()));
 
         return newStock;
     }

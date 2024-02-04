@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/capitalIncrease")
 public class CapitalIncreaseController {
 
-    public final CapitalIncreaseService serviceCapitalIncrease;
+    private final CapitalIncreaseService serviceCapitalIncrease;
 
     public CapitalIncreaseController(@Autowired CapitalIncreaseService serviceCapitalIncrease){
         this.serviceCapitalIncrease = serviceCapitalIncrease;

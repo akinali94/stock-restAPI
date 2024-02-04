@@ -11,8 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CouponGetModel {
-    private CouponType couponType;
-    private int arrangementNo;
+    private String couponType;
+    private Long arrangementNo;
+    private int couponNo;
     private int clippingNo;
     private int yearNo;
     private boolean isUsed;

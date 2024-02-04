@@ -24,15 +24,13 @@ public class CapitalIncrease {
     private BigDecimal rightIssue; //bedelli sermaye arttirimi
     @Digits(integer = 15, fraction = 2)
     private BigDecimal bonusIssue; //bedelsiz sermaye artirimi
-    private byte increasingRate; //Artirim orani
+    private int increasingRate; //Artirim orani
     @Digits(integer = 15, fraction = 2)
     private BigDecimal capitalValue; //Eski sermaye degeri + bedelli + bedelsiz
     private BigDecimal residualValue; //Hisse senedinde kullanilmasi capitalValue'dan kalan deger.
     @OneToMany(mappedBy = "capitalIncrease")
     private List<Stock> stockList;
-
-/*    @OneToMany(mappedBy = "arrangementNo")
-    private List<Coupon> couponList;*/
     @OneToMany(mappedBy = "capitalIncrease")
-    private List<Process> processList;
+    private List<DividendDistribution> dividendDistributionList;
+
 }
