@@ -10,7 +10,6 @@ public interface MapperCapitalIncrease {
     CapitalIncrease toAdd(CapitalIncreaseAddModel addModel);
 
     //update model eklenecek
-
     CapitalIncreaseGetModel toModelGet(CapitalIncrease capitalIncrease);
     List<CapitalIncreaseGetModel> toModelGetList(List<CapitalIncrease> capitalIncreaseList);
 }

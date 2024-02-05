@@ -32,4 +32,6 @@ public class CapitalIncreaseController {
         return ResponseEntity.ok(serviceCapitalIncrease.getAllCapitalIncrease());
     }
 
+
+
 }

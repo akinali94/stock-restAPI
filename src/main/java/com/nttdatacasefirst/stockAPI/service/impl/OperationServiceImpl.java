@@ -4,9 +4,10 @@ import com.nttdatacasefirst.stockAPI.dtos.OperationAddModel;
 import com.nttdatacasefirst.stockAPI.dtos.OperationGetModel;
 import com.nttdatacasefirst.stockAPI.entity.*;
 import com.nttdatacasefirst.stockAPI.entity.enums.OperationType;
-import com.nttdatacasefirst.stockAPI.exceptions.StockNotFoundException;
+import com.nttdatacasefirst.stockAPI.exceptions.DividendDistributionNotFoundException;
+import com.nttdatacasefirst.stockAPI.exceptions.OperationNotFoundException;
 import com.nttdatacasefirst.stockAPI.mapper.MapperOperation;
-import com.nttdatacasefirst.stockAPI.repository.OperationsRepository;
+import com.nttdatacasefirst.stockAPI.repository.OperationRepository;
 import com.nttdatacasefirst.stockAPI.service.DividendDistributionService;
 import com.nttdatacasefirst.stockAPI.service.OperationService;
 import com.nttdatacasefirst.stockAPI.service.ShareholderService;
@@ -20,13 +21,13 @@ import java.util.List;
 
 @Service
 public class OperationServiceImpl implements OperationService {
-    private final OperationsRepository repositoryOperation;
+    private final OperationRepository repositoryOperation;
     private final MapperOperation mapperOperation;
     private final StockService serviceStock;
     private final ShareholderService serviceShareholder;
     private final DividendDistributionService serviceDividendDistribution;
 
-    public OperationServiceImpl(@Autowired OperationsRepository repositoryOperation,
+    public OperationServiceImpl(@Autowired OperationRepository repositoryOperation,
                                 @Autowired MapperOperation mapperOperation,
                                 @Autowired StockService serviceStock,
                                 @Autowired ShareholderService serviceShareholder,
@@ -63,9 +64,14 @@ public class OperationServiceImpl implements OperationService {
 
         //Dividend Operations
         if(addModel.getOperationType().equals("DIVIDEND")){
-            //Check DividentDistribution
-            DividendDistribution div = serviceDividendDistribution
+            //Check DividendDistribution
+            List<DividendDistribution> div = serviceDividendDistribution
                     .getDividendDistributionByCapitalIncrementArrNo(addModel.getArrangementNo());
+            //Find last DividendDistribution for this Capital Increase
+            DividendDistribution maxSerialNoDividend = div.stream()
+                    .max(Comparator.comparing(DividendDistribution::getSerialNo))
+                    .orElseThrow(() ->
+                            new DividendDistributionNotFoundException("Dividend Dist Not Found when search max Serial No"));
 
             //Find available Stock
             Stock availableStock = serviceStock.getAvailableStockForDividendOperation(stockList, findShareholder);
@@ -73,14 +79,24 @@ public class OperationServiceImpl implements OperationService {
             newOperation.setStock(availableStock);
             newOperation.setDate(new Date());
             newOperation.setShareHolder(findShareholder);
-            newOperation.setDividentYear(div.getDividendYear());
-            newOperation.setDividendTotal(availableStock.getNominalValue().intValue() * div.getDividentRate() / 100);
+            newOperation.setDividentYear(maxSerialNoDividend.getDividendYear());
+            newOperation.setDividendTotal(availableStock.getNominalValue().intValue() * maxSerialNoDividend.getDividentRate() / 100);
 
         }
 
-        repositoryOperation.save(newOperation);
+        Operation createdOperation = repositoryOperation.save(newOperation);
 
-        return mapperOperation.toModelGet(newOperation);
+        return mapperOperation.toModelGet(createdOperation);
+    }
+
+    @Override
+    public List<OperationGetModel> getAllOperations() {
+
+        List<Operation> getAll = repositoryOperation.findAll();
+        if(getAll.isEmpty())
+            throw new OperationNotFoundException("There is no operation");
+
+        return mapperOperation.toModelGetList(getAll);
     }
 
 }

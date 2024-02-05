@@ -5,10 +5,11 @@ import com.nttdatacasefirst.stockAPI.dtos.OperationGetModel;
 import com.nttdatacasefirst.stockAPI.service.OperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+@RestController
 @RequestMapping("/operations")
 public class OperationController {
     private final OperationService serviceOperation;
@@ -16,9 +17,14 @@ public class OperationController {
     public OperationController(@Autowired OperationService operationService){
         this.serviceOperation = operationService;
     }
-
-    public ResponseEntity<OperationGetModel> addOperation(OperationAddModel addModel){
+    @PostMapping("/add")
+    public ResponseEntity<OperationGetModel> addOperation(@RequestBody OperationAddModel addModel){
         return ResponseEntity.ok(serviceOperation.addOperation(addModel));
+    }
+
+    @GetMapping("/search/all")
+    public ResponseEntity<List<OperationGetModel>> getAllOperations(){
+        return ResponseEntity.ok(serviceOperation.getAllOperations());
     }
 
 

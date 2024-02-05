@@ -29,7 +29,5 @@ public class Coupon {
     private boolean used;
     @ManyToOne(fetch = FetchType.LAZY)
     private Stock stockNo;
-    @OneToMany(mappedBy = "coupon")
-    private List<Operation> operationList;
 
 }
