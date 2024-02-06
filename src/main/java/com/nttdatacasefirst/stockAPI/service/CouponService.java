@@ -13,6 +13,7 @@ public interface CouponService {
 
     Coupon findNotUsedAndMinClippingNoCoupon(Stock stock);
     Coupon findNotUsedandMinDividendYear(Stock stock);
-    List<CouponGetModel> getCouponByArrangementNo(Long arrNo);
+    List<CouponGetModel> getAllCoupon();
+    List<CouponGetModel> getCouponByStockId(String id);
 
 }

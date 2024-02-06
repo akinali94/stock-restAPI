@@ -1,11 +1,11 @@
 package com.nttdatacasefirst.stockAPI.service.impl;
 
 import com.nttdatacasefirst.stockAPI.dtos.CouponGetModel;
-import com.nttdatacasefirst.stockAPI.entity.CapitalIncrease;
 import com.nttdatacasefirst.stockAPI.entity.Coupon;
 import com.nttdatacasefirst.stockAPI.entity.Stock;
 import com.nttdatacasefirst.stockAPI.entity.enums.CouponType;
 import com.nttdatacasefirst.stockAPI.exceptions.CouponNotFoundException;
+import com.nttdatacasefirst.stockAPI.mapper.MapperCoupon;
 import com.nttdatacasefirst.stockAPI.repository.CouponRepository;
 import com.nttdatacasefirst.stockAPI.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,12 @@ import java.util.List;
 public class CouponServiceImpl implements CouponService {
 
     private final CouponRepository repositoryCoupon;
+    private final MapperCoupon mapperCoupon;
 
-    public CouponServiceImpl(@Autowired CouponRepository repositoryCoupon) {
+    public CouponServiceImpl(@Autowired CouponRepository repositoryCoupon,
+                             @Autowired MapperCoupon mapperCoupon) {
         this.repositoryCoupon = repositoryCoupon;
+        this.mapperCoupon = mapperCoupon;
     }
 
     @Override
@@ -69,8 +72,25 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public List<CouponGetModel> getCouponByArrangementNo(Long arrNo) {
-        return null;
+    public List<CouponGetModel> getAllCoupon(){
+
+        List<Coupon> allCoupons = repositoryCoupon.findAll();
+        if(allCoupons.isEmpty())
+            throw new CouponNotFoundException("There is no Coupon");
+
+        return mapperCoupon.toModelGetList(allCoupons);
     }
+
+
+    @Override
+    public List<CouponGetModel> getCouponByStockId(String id) {
+        List<Coupon> getCoupon = repositoryCoupon.findByStockNo_Id(Long.parseLong(id));
+
+        if(getCoupon.isEmpty())
+            throw new CouponNotFoundException("Coupon Not Found");
+
+        return mapperCoupon.toModelGetList(getCoupon);
+    }
+
 
 }

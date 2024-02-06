@@ -13,7 +13,7 @@ public interface CouponRepository extends BaseRepository<Coupon>{
     List<Coupon> findByArrangementNo(Long arrNo);
     List<Coupon> findByType(CouponType type);
     List<Coupon> findByYearNo(int yearNo);
-    List<Coupon> findByStockNo_SerialNo(int serial);
+    List<Coupon> findByStockNo_Id(Long id);
 
     //used! should add
 

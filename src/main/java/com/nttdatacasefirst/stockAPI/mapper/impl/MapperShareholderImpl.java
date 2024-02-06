@@ -55,13 +55,4 @@ public class MapperShareholderImpl implements MapperShareholder {
                         x.getInvestorType().getLabel()))
                 .collect(Collectors.toList());
     }
-    public ShareholderUpdateModel toModelUpdate(ShareHolder shareHolder){
-        ShareholderUpdateModel newUpdateModel = new ShareholderUpdateModel();
-        newUpdateModel.setRegNo(shareHolder.getRegistorNo());
-        newUpdateModel.setTitle(shareHolder.getTitle());
-        newUpdateModel.setPhoneNo(shareHolder.getPhoneNo());
-        newUpdateModel.setInvestorType(shareHolder.getInvestorType().getLabel());
-
-        return newUpdateModel;
-    }
 }

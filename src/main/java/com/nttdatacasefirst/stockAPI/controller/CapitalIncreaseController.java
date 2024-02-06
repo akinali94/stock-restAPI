@@ -26,12 +26,15 @@ public class CapitalIncreaseController {
         return ResponseEntity.ok(serviceCapitalIncrease.addCapitalIncrease(addModel));
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/search/all")
     public ResponseEntity<List<CapitalIncreaseGetModel>> getAllCapitalIncrease(){
 
         return ResponseEntity.ok(serviceCapitalIncrease.getAllCapitalIncrease());
     }
 
+    @GetMapping("/search/{arrNo}")
+    public ResponseEntity<CapitalIncreaseGetModel> getCapitalInreaceByRegNo(@PathVariable String arrNo){
 
-
+        return ResponseEntity.ok(serviceCapitalIncrease.getCapitalIncreaseByArrNo(arrNo));
+    }
 }

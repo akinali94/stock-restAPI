@@ -71,6 +71,14 @@ public class CapitalIncreaseServiceImpl implements CapitalIncreaseService {
     }
 
     @Override
+    public CapitalIncreaseGetModel getCapitalIncreaseByArrNo(String arrNo){
+        return mapperCapitalIncrease.toModelGet(
+                repositoryCapitalIncrease.findById(Long.parseLong(arrNo))
+                .orElseThrow(() -> new CapitalIncreaseNotFoundException("Capital Increase with this Arr No Not Found"))
+        );
+    }
+
+    @Override
     public Optional<CapitalIncrease> findCapitalIncrease(Long arrNo) {
 
         return repositoryCapitalIncrease.findById(arrNo);

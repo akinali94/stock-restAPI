@@ -2,7 +2,6 @@ package com.nttdatacasefirst.stockAPI.controller;
 
 import com.nttdatacasefirst.stockAPI.dtos.DividendDistributionAddModel;
 import com.nttdatacasefirst.stockAPI.dtos.DividendDistributionGetModel;
-import com.nttdatacasefirst.stockAPI.entity.DividendDistribution;
 import com.nttdatacasefirst.stockAPI.service.DividendDistributionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

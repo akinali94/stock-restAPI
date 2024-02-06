@@ -16,5 +16,4 @@ public interface MapperShareholder {
     ShareholderGetModel toModelGet(ShareHolder shareHolder);
 
     List<ShareholderGetModel> toModelGetList(List<ShareHolder> shareHolders);
-    ShareholderUpdateModel toModelUpdate(ShareHolder shareHolder);
 }

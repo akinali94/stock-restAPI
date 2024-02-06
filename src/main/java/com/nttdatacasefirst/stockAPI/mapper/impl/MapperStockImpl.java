@@ -25,6 +25,7 @@ public class MapperStockImpl implements MapperStock {
     public StockGetModel toModelGet(Stock stock) {
         StockGetModel getStock = new StockGetModel();
 
+        getStock.setId(getStock.getId());
         getStock.setCapitalIncreaseArrNo(getStock.getCapitalIncreaseArrNo());
         getStock.setSerialNo(getStock.getSerialNo());
         getStock.setNominalValue(getStock.getNominalValue());
@@ -37,6 +38,7 @@ public class MapperStockImpl implements MapperStock {
     public List<StockGetModel> toModelGetList(List<Stock> stockList) {
         return stockList.stream()
                 .map(x -> new StockGetModel(
+                        x.getId(),
                         x.getCapitalIncrease().getArrangementNo(),
                         x.getSerialNo(),
                         x.getNominalValue(),

@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StockGetModel {
+    private Long Id;
     private Long capitalIncreaseArrNo;
     private int serialNo;
     private BigDecimal nominalValue;

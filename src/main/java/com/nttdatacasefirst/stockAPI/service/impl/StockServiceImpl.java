@@ -7,7 +7,6 @@ import com.nttdatacasefirst.stockAPI.entity.ShareHolder;
 import com.nttdatacasefirst.stockAPI.entity.Stock;
 import com.nttdatacasefirst.stockAPI.exceptions.CapitalIncreaseIsNotEnoughException;
 import com.nttdatacasefirst.stockAPI.exceptions.CapitalIncreaseNotFoundException;
-import com.nttdatacasefirst.stockAPI.exceptions.CouponNotFoundException;
 import com.nttdatacasefirst.stockAPI.exceptions.StockNotFoundException;
 import com.nttdatacasefirst.stockAPI.mapper.MapperStock;
 import com.nttdatacasefirst.stockAPI.repository.StockRepository;
@@ -21,7 +20,6 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class StockServiceImpl implements StockService {
@@ -75,7 +73,8 @@ public class StockServiceImpl implements StockService {
         Stock saved = repositoryStock.save(newStock);
 
         //Set Residual Value on Capital Increase
-        serviceCapitalIncrease.findCapitalIncrease(newStock.getCapitalIncrease().getArrangementNo()).get()
+        serviceCapitalIncrease.findCapitalIncrease(newStock.getCapitalIncrease().getArrangementNo())
+                .orElseThrow(() -> new CapitalIncreaseNotFoundException("Capital Increase Not Found, in Stock Service"))
                 .setResidualValue(residual.add(newStock.getNominalValue()));
 
         //Create Coupons
@@ -87,10 +86,11 @@ public class StockServiceImpl implements StockService {
     @Override
     public List<StockGetModel> getStocksofCapitalIncrease(String arrNo) {
         Long arrNoLong = Long.parseLong(arrNo);
-        Optional<CapitalIncrease> findCapitalIncrease = serviceCapitalIncrease.findCapitalIncrease(arrNoLong);
+        CapitalIncrease findCapitalIncrease = serviceCapitalIncrease.findCapitalIncrease(arrNoLong)
+                .orElseThrow(() -> new CapitalIncreaseNotFoundException("Capital Increase Not Found, in Stock Service"));
 
 
-        return mapperStock.toModelGetList(repositoryStock.findByCapitalIncrease(findCapitalIncrease.get()));
+        return mapperStock.toModelGetList(repositoryStock.findByCapitalIncrease(findCapitalIncrease));
     }
 
     @Override
@@ -106,7 +106,7 @@ public class StockServiceImpl implements StockService {
         Long arrNoLong = Long.parseLong(arrNo);
         //List Stocks of a Capital Increase
         CapitalIncrease findCapitalIncrease = serviceCapitalIncrease.findCapitalIncrease(arrNoLong)
-                .orElseThrow(() -> new CapitalIncreaseNotFoundException("Capital Increase Not Found"));
+                .orElseThrow(() -> new CapitalIncreaseNotFoundException("Capital Increase Not Found, in Stock Service"));
 
         return repositoryStock.findByCapitalIncrease(findCapitalIncrease);
     }

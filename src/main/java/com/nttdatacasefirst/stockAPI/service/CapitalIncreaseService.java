@@ -12,5 +12,7 @@ public interface CapitalIncreaseService {
     CapitalIncreaseGetModel addCapitalIncrease(CapitalIncreaseAddModel addModel);
     List<CapitalIncreaseGetModel> getAllCapitalIncrease();
 
+    CapitalIncreaseGetModel getCapitalIncreaseByArrNo(String arrNo);
+
     Optional<CapitalIncrease> findCapitalIncrease(Long arrNo);
 }
