@@ -1,5 +1,8 @@
 package com.nttdatacasefirst.stockAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
@@ -20,7 +23,7 @@ public class Stock {
     @Id
     @GeneratedValue
     private Long Id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CapitalIncrease capitalIncrease;
     private int serialNo; //seri no
 
@@ -28,9 +31,12 @@ public class Stock {
     private BigDecimal nominalValue; //nominal deger
 
     @OneToMany(mappedBy ="stockNo")
+    @JsonManagedReference
     private List<Coupon> couponList;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    @JoinColumn(nullable = true)
     private ShareHolder shareHolder;
 
 }

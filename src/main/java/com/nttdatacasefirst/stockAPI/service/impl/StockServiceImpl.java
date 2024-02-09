@@ -12,6 +12,7 @@ import com.nttdatacasefirst.stockAPI.mapper.MapperStock;
 import com.nttdatacasefirst.stockAPI.repository.StockRepository;
 import com.nttdatacasefirst.stockAPI.service.CapitalIncreaseService;
 import com.nttdatacasefirst.stockAPI.service.CouponService;
+import com.nttdatacasefirst.stockAPI.service.OperationService;
 import com.nttdatacasefirst.stockAPI.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StockServiceImpl implements StockService {
@@ -42,32 +42,46 @@ public class StockServiceImpl implements StockService {
     public StockGetModel addStock(StockAddModel addModel) {
 
         //instantiate new Stock
-        Stock newStock = mapperStock.toAdd(addModel);
+        Stock newStock = new Stock();
 
         //Check Capital increase is true
-        Optional<CapitalIncrease> checkedIncrease =
-                serviceCapitalIncrease.findCapitalIncrease(newStock.getCapitalIncrease().getArrangementNo());
-        if(checkedIncrease.isEmpty()){
-            throw new CapitalIncreaseNotFoundException("Capital Increase Not Found");
-        }
+        CapitalIncrease checkedIncrease =
+                serviceCapitalIncrease.findCapitalIncrease(Long.parseLong(addModel.getCapitalIncreaseArrNo()))
+                        .orElseThrow(() -> new CapitalIncreaseNotFoundException("Capital Increase Not found in Stock Service"));
+
+        //Set Capital Increase
+        newStock.setCapitalIncrease(checkedIncrease);
 
         //Check NominalValue
-        BigDecimal residual = checkedIncrease.get().getResidualValue();
-        if(residual.compareTo(newStock.getNominalValue()) >= 0)
+        BigDecimal residual = checkedIncrease.getResidualValue();
+        if(residual.compareTo(addModel.getNominalValue()) < 0)
             throw new CapitalIncreaseIsNotEnoughException("Capital Increase Is Not Enough to produce Stock");
 
+        //Set Nominal Value
+        newStock.setNominalValue(addModel.getNominalValue());
 
         //Serial number assignment
         List<Stock> getStockList =  repositoryStock.findByCapitalIncrease(newStock.getCapitalIncrease());
         if(getStockList.isEmpty())
             newStock.setSerialNo(1);
         else{
-            int lastSerialNo = getStockList.stream().max(Comparator.comparing(Stock::getSerialNo)).get().getSerialNo();
-            newStock.setSerialNo(lastSerialNo + 1);
+/*            int lastSerialNo = getStockList.stream().max(Comparator.comparing(Stock::getSerialNo)).get().getSerialNo();
+            newStock.setSerialNo(lastSerialNo + 1);*/
+
+            int newSerialNo = 1;
+            for(Stock st : getStockList){
+                if(st.getNominalValue().compareTo(addModel.getNominalValue()) >= 1){
+                    st.setSerialNo(st.getSerialNo() + 1);
+                } else{
+                    newSerialNo = st.getSerialNo() + 1;
+                }
+            }
+
+            newStock.setSerialNo(newSerialNo);
         }
 
         //Set null user
-        newStock.setShareHolder(null);
+       newStock.setShareHolder(null);
 
         //Save Stock to Database
         Stock saved = repositoryStock.save(newStock);
@@ -75,7 +89,7 @@ public class StockServiceImpl implements StockService {
         //Set Residual Value on Capital Increase
         serviceCapitalIncrease.findCapitalIncrease(newStock.getCapitalIncrease().getArrangementNo())
                 .orElseThrow(() -> new CapitalIncreaseNotFoundException("Capital Increase Not Found, in Stock Service"))
-                .setResidualValue(residual.add(newStock.getNominalValue()));
+                .setResidualValue(residual.subtract(newStock.getNominalValue()));
 
         //Create Coupons
         serviceCoupon.AddCouponFromStockService(saved);
@@ -140,5 +154,34 @@ public class StockServiceImpl implements StockService {
     @Override
     public void changeCouponToUsedInDividdentOperation(Stock stock){
         serviceCoupon.findNotUsedandMinDividendYear(stock).setUsed(true);
+    }
+
+    @Override
+    public StockGetModel deleteStockById(String id){
+        Stock findStock = repositoryStock.findById(Long.parseLong(id))
+                .orElseThrow(() -> new StockNotFoundException("No stock found to be deleted"));
+
+        StockGetModel mapped = mapperStock.toModelGet(findStock);
+
+        BigDecimal residualValue = findStock.getCapitalIncrease().getResidualValue();
+        findStock.getCapitalIncrease().setResidualValue(residualValue.add(findStock.getNominalValue()));
+
+        //serviceCoupon.deleteCouponOfStock(findStock);
+        //serviceOperation.deleteOperationOfStocks(findStock);
+        repositoryStock.delete(findStock);
+
+        return mapped;
+    }
+
+    @Override
+    public void changeShareholderofStock(Stock stock, ShareHolder shareHolder){
+        stock.setShareHolder(shareHolder);
+    }
+
+    //Silinecek
+    @Override
+    public List<Stock> getAllStockEntity(){
+
+        return repositoryStock.findAll();
     }
 }

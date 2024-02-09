@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShareholderAddModel {
-    private Long regNo;
+    private String regNo;
     private String title;
     private String address;
     private String phoneNo;

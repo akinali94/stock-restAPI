@@ -1,5 +1,6 @@
 package com.nttdatacasefirst.stockAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nttdatacasefirst.stockAPI.entity.enums.CouponType;
 import com.nttdatacasefirst.stockAPI.entity.enums.converters.CouponTypeConverter;
 import jakarta.persistence.*;
@@ -27,7 +28,8 @@ public class Coupon {
     private int clippingNo; //kupur numarasi - pay alma
     private int yearNo; //kar payi kuponu
     private boolean used;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private Stock stockNo;
 
 }

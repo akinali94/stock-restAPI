@@ -61,7 +61,9 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Coupon findNotUsedAndMinClippingNoCoupon(Stock stock) {
-        return stock.getCouponList().stream().filter(x -> !x.isUsed()).min(Comparator.comparing(Coupon::getClippingNo))
+        return stock.getCouponList().stream()
+                .filter(y -> y.getClippingNo() != 0)
+                .filter(x -> !x.isUsed()).min(Comparator.comparing(Coupon::getClippingNo))
                 .orElseThrow(() -> new CouponNotFoundException("Coupon Not Found"));
     }
 
@@ -90,6 +92,12 @@ public class CouponServiceImpl implements CouponService {
             throw new CouponNotFoundException("Coupon Not Found");
 
         return mapperCoupon.toModelGetList(getCoupon);
+    }
+
+    @Override
+    public void deleteCouponOfStock(Stock stock) {
+        List<Coupon> getCouponListOfStock = repositoryCoupon.findByStockNo_Id(stock.getId());
+        repositoryCoupon.deleteAll(getCouponListOfStock);
     }
 
 

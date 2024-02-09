@@ -1,6 +1,8 @@
 package com.nttdatacasefirst.stockAPI.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,8 +24,10 @@ public class DividendDistribution { //Kar payi dagitimi
     private int dividendYear;
     private int serialNo;
     private int dividentRate; //kar payi dagitim orani/ Baslangicta belirlenir
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private CapitalIncrease capitalIncrease;
     @OneToMany
+    @JsonManagedReference
     private List<Operation> operationList;
 }

@@ -1,10 +1,6 @@
 package com.nttdatacasefirst.stockAPI.dtos;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -17,5 +13,6 @@ public class StockGetModel {
     private Long capitalIncreaseArrNo;
     private int serialNo;
     private BigDecimal nominalValue;
+    @NonNull
     private String Shareholder;
 }

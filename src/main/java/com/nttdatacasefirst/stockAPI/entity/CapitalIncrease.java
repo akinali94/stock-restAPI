@@ -1,5 +1,6 @@
 package com.nttdatacasefirst.stockAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
@@ -29,8 +30,10 @@ public class CapitalIncrease {
     private BigDecimal capitalValue; //Eski sermaye degeri + bedelli + bedelsiz
     private BigDecimal residualValue; //Hisse senedinde kullanilmasi capitalValue'dan kalan deger.
     @OneToMany(mappedBy = "capitalIncrease")
+    @JsonManagedReference
     private List<Stock> stockList;
     @OneToMany(mappedBy = "capitalIncrease")
+    @JsonManagedReference
     private List<DividendDistribution> dividendDistributionList;
 
 }

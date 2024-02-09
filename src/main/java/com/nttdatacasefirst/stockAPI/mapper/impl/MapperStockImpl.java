@@ -1,7 +1,7 @@
 package com.nttdatacasefirst.stockAPI.mapper.impl;
 
-import com.nttdatacasefirst.stockAPI.dtos.StockAddModel;
 import com.nttdatacasefirst.stockAPI.dtos.StockGetModel;
+import com.nttdatacasefirst.stockAPI.entity.ShareHolder;
 import com.nttdatacasefirst.stockAPI.entity.Stock;
 import com.nttdatacasefirst.stockAPI.mapper.MapperStock;
 import org.springframework.stereotype.Component;
@@ -13,23 +13,14 @@ import java.util.stream.Collectors;
 public class MapperStockImpl implements MapperStock {
 
     @Override
-    public Stock toAdd(StockAddModel addModel) {
-        Stock newStock = new Stock();
-        newStock.setNominalValue(addModel.getNominalValue());
-        newStock.getCapitalIncrease().setArrangementNo(Long.parseLong(addModel.getCapitalIncreaseArrNo()));
-
-        return newStock;
-    }
-
-    @Override
     public StockGetModel toModelGet(Stock stock) {
         StockGetModel getStock = new StockGetModel();
 
-        getStock.setId(getStock.getId());
-        getStock.setCapitalIncreaseArrNo(getStock.getCapitalIncreaseArrNo());
-        getStock.setSerialNo(getStock.getSerialNo());
-        getStock.setNominalValue(getStock.getNominalValue());
-        getStock.setShareholder(getStock.getShareholder());
+        getStock.setId(stock.getId());
+        getStock.setCapitalIncreaseArrNo(stock.getCapitalIncrease().getArrangementNo());
+        getStock.setSerialNo(stock.getSerialNo());
+        getStock.setNominalValue(stock.getNominalValue());
+        getStock.setShareholder(stock.getShareHolder() == null ? "null" : stock.getShareHolder().getTitle() );
 
         return getStock;
     }
@@ -37,12 +28,16 @@ public class MapperStockImpl implements MapperStock {
     @Override
     public List<StockGetModel> toModelGetList(List<Stock> stockList) {
         return stockList.stream()
-                .map(x -> new StockGetModel(
-                        x.getId(),
-                        x.getCapitalIncrease().getArrangementNo(),
-                        x.getSerialNo(),
-                        x.getNominalValue(),
-                        x.getShareHolder().getTitle()))
+                .map(x -> {
+                    ShareHolder sHolder = x.getShareHolder();
+                    String titleGet = sHolder == null ? "null" : sHolder.getTitle();
+                    return new StockGetModel(
+                            x.getId(),
+                            x.getCapitalIncrease().getArrangementNo(),
+                            x.getSerialNo(),
+                            x.getNominalValue(),
+                            titleGet);
+                })
                 .collect(Collectors.toList());
     }
 }

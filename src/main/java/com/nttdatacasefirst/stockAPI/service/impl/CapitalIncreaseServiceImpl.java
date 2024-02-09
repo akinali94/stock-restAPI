@@ -47,17 +47,15 @@ public class CapitalIncreaseServiceImpl implements CapitalIncreaseService {
         createdCapital.setCapitalValue(capitalValue);
 
         //Assign residaulValue to control Stock production
-        createdCapital.setResidualValue(new BigDecimal(0));
+        createdCapital.setResidualValue(capitalValue);
 
         //Assign year of CapitalIncrease
         createdCapital.setYear(Year.now().getValue());
 
         //Save to repo
-        repositoryCapitalIncrease.save(createdCapital);
+        CapitalIncrease saved = repositoryCapitalIncrease.save(createdCapital);
 
-        //Problem: donen Model, repodan donmuyor.
-
-        return mapperCapitalIncrease.toModelGet(createdCapital);
+        return mapperCapitalIncrease.toModelGet(saved);
     }
 
     @Override

@@ -5,9 +5,11 @@ import com.nttdatacasefirst.stockAPI.dtos.ShareholderAddModel;
 import com.nttdatacasefirst.stockAPI.dtos.ShareholderGetModel;
 import com.nttdatacasefirst.stockAPI.dtos.ShareholderUpdateModel;
 import com.nttdatacasefirst.stockAPI.entity.ShareHolder;
+import com.nttdatacasefirst.stockAPI.entity.Stock;
 import com.nttdatacasefirst.stockAPI.entity.enums.InvestorType;
 import com.nttdatacasefirst.stockAPI.exceptions.ShareholderAlreadyExistException;
 import com.nttdatacasefirst.stockAPI.exceptions.ShareholderNotFoundException;
+import com.nttdatacasefirst.stockAPI.exceptions.ShareholderRegNoNullException;
 import com.nttdatacasefirst.stockAPI.mapper.MapperShareholder;
 import com.nttdatacasefirst.stockAPI.repository.ShareholderRepository;
 import com.nttdatacasefirst.stockAPI.service.ShareholderService;
@@ -29,8 +31,12 @@ public class ShareholderServiceImpl implements ShareholderService {
     }
     @Override
     public ShareholderGetModel addShareHolder(ShareholderAddModel addModel) {
+        if(addModel.getRegNo() == null || addModel.getRegNo().length() != 8 || addModel.getRegNo().charAt(0) == '0' )
+            throw new ShareholderRegNoNullException("Shareholder Register No can not be null " +
+                    "or length is not 8 digit " +
+                    "or it starts with zero");
 
-        ShareHolder checkShareholder = repositoryShareholder.findShareHolderByRegistorNo(addModel.getRegNo());
+        ShareHolder checkShareholder = repositoryShareholder.findShareHolderByRegistorNo(Long.parseLong(addModel.getRegNo()));
         if(checkShareholder != null)
             throw new ShareholderAlreadyExistException("Shareholder already exist");
 
@@ -84,7 +90,7 @@ public class ShareholderServiceImpl implements ShareholderService {
     public ShareholderGetModel findShareholderByRegNo(String regNo) {
         Long regNoLong = Long.parseLong(regNo);
         if(repositoryShareholder.findShareHolderByRegistorNo(regNoLong) == null)
-            throw new ShareholderNotFoundException("Shareholder Not found");
+            throw new ShareholderNotFoundException("Shareholder Not found with this register No");
 
         return mapperShareholder.toModelGet(repositoryShareholder.findShareHolderByRegistorNo(regNoLong));
 
@@ -94,7 +100,7 @@ public class ShareholderServiceImpl implements ShareholderService {
     public ShareholderGetModel findShareholderByTitle(String title) {
         ShareHolder getShareholder = repositoryShareholder.findShareHolderByTitle(title);
         if(getShareholder == null)
-            throw new ShareholderNotFoundException("There is no Shareholder");
+            throw new ShareholderNotFoundException("There is no Shareholder with this title");
 
         return mapperShareholder.toModelGet(getShareholder);
     }
@@ -103,7 +109,7 @@ public class ShareholderServiceImpl implements ShareholderService {
     public ShareholderGetModel findShareholderByAddress(String address) {
         ShareHolder getShareholder = repositoryShareholder.findShareHolderByAddress(address);
         if(getShareholder == null)
-            throw new ShareholderNotFoundException("There is no Shareholder");
+            throw new ShareholderNotFoundException("There is no Shareholder with this address");
 
         return mapperShareholder.toModelGet(getShareholder);
     }
@@ -112,7 +118,7 @@ public class ShareholderServiceImpl implements ShareholderService {
     public ShareholderGetModel findShareholderByPhone(String phoneNo) {
         ShareHolder getShareholder = repositoryShareholder.findShareHolderByPhoneNo(phoneNo);
         if(getShareholder == null)
-            throw new ShareholderNotFoundException("There is no Shareholder");
+            throw new ShareholderNotFoundException("There is no Shareholder with this phone number");
 
         return mapperShareholder.toModelGet(getShareholder);
     }
@@ -121,7 +127,7 @@ public class ShareholderServiceImpl implements ShareholderService {
     public List<ShareholderGetModel> findByInvestorType(String investorType) {
         List<ShareHolder> getShareholder = repositoryShareholder.findByInvestorType(InvestorType.valueOf(investorType));
         if(getShareholder.isEmpty())
-            throw new ShareholderNotFoundException("There is no Shareholder");
+            throw new ShareholderNotFoundException("There is no Shareholder with this InvestorType");
 
         return mapperShareholder.toModelGetList(getShareholder);
     }
@@ -130,7 +136,7 @@ public class ShareholderServiceImpl implements ShareholderService {
     public List<ShareholderGetModel> haveStock() {
         List<ShareHolder> getShareholder = repositoryShareholder.findByStockListIsNotNull();
         if(getShareholder.isEmpty())
-            throw new ShareholderNotFoundException("There is no Shareholder");
+            throw new ShareholderNotFoundException("There is no Shareholder that has any Stock");
 
         return mapperShareholder.toModelGetList(getShareholder);
     }
@@ -139,7 +145,7 @@ public class ShareholderServiceImpl implements ShareholderService {
     public List<ShareholderGetModel> haveNotStock() {
         List<ShareHolder> getShareholder = repositoryShareholder.findByStockListIsNull();
         if(getShareholder.isEmpty())
-            throw new ShareholderNotFoundException("There is no Shareholder");
+            throw new ShareholderNotFoundException("There is no Shareholder that has no Stock");
 
         return mapperShareholder.toModelGetList(getShareholder);
     }
@@ -149,5 +155,13 @@ public class ShareholderServiceImpl implements ShareholderService {
         return repositoryShareholder.findById(Long.parseLong(regNo))
                 .orElseThrow(() -> new ShareholderNotFoundException("Shareholder Not Found"));
     }
+
+/*    @Override
+    public void changeToNullWhenStockDelete(Stock stock){
+        List<ShareHolder> shareholderList = repositoryShareholder.findByStockListIsNotNull();
+        shareholderList.stream().filter(x ->
+            x.getStockList().contains(stock)).toList
+
+    }*/
 
 }

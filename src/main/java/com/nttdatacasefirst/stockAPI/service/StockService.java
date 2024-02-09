@@ -19,4 +19,9 @@ public interface StockService {
     void changeCouponToUsedInStockOperation(Stock stock);
     Stock getAvailableStockForDividendOperation(List<Stock> stockList, ShareHolder shareholder);
     void changeCouponToUsedInDividdentOperation(Stock stock);
+    StockGetModel deleteStockById(String id);
+    void changeShareholderofStock(Stock stock, ShareHolder shareHolder);
+
+    //Silinecek
+    List<Stock> getAllStockEntity();
 }

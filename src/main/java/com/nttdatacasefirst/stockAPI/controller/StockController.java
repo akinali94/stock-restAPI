@@ -2,6 +2,7 @@ package com.nttdatacasefirst.stockAPI.controller;
 
 import com.nttdatacasefirst.stockAPI.dtos.StockAddModel;
 import com.nttdatacasefirst.stockAPI.dtos.StockGetModel;
+import com.nttdatacasefirst.stockAPI.entity.Stock;
 import com.nttdatacasefirst.stockAPI.service.StockService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +37,17 @@ public class StockController {
     public ResponseEntity<List<StockGetModel>> getStockByCapitalIncrease(@PathVariable String id){
         return ResponseEntity.ok(serviceStock.getStocksofCapitalIncrease(id));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<StockGetModel> deleteStockById(@PathVariable String id){
+        return ResponseEntity.ok(serviceStock.deleteStockById(id));
+    }
+
+
+    //Silinecek Test icindi
+    @GetMapping("/search/allentity")
+    public ResponseEntity<List<Stock>> getAllStocksEntity(){
+        return ResponseEntity.ok(serviceStock.getAllStockEntity());
+    }
+
 }

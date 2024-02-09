@@ -16,4 +16,5 @@ public interface CouponService {
     List<CouponGetModel> getAllCoupon();
     List<CouponGetModel> getCouponByStockId(String id);
 
+    void deleteCouponOfStock(Stock stock);
 }

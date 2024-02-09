@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OperationServiceImpl implements OperationService {
@@ -60,6 +61,9 @@ public class OperationServiceImpl implements OperationService {
 
             //Change coupon as used
             serviceStock.changeCouponToUsedInStockOperation(availableStock);
+
+            //Set Shareholder of Stock
+            serviceStock.changeShareholderofStock(availableStock, findShareholder);
         }
 
         //Dividend Operations
@@ -82,6 +86,8 @@ public class OperationServiceImpl implements OperationService {
             newOperation.setDividentYear(maxSerialNoDividend.getDividendYear());
             newOperation.setDividendTotal(availableStock.getNominalValue().intValue() * maxSerialNoDividend.getDividentRate() / 100);
 
+            serviceStock.changeShareholderofStock(availableStock, findShareholder);
+
         }
 
         Operation createdOperation = repositoryOperation.save(newOperation);
@@ -98,5 +104,15 @@ public class OperationServiceImpl implements OperationService {
 
         return mapperOperation.toModelGetList(getAll);
     }
+
+/*    @Override
+    public void deleteOperationOfStocks(Stock stock){
+        List<Operation> findOperationsByStock = repositoryOperation.findAll()
+                .stream()
+                .filter(x -> x.getStock() == stock)
+                .toList();
+
+        repositoryOperation.deleteAll(findOperationsByStock);
+    }*/
 
 }

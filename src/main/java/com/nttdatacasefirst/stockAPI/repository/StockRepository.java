@@ -5,7 +5,6 @@ import com.nttdatacasefirst.stockAPI.entity.Stock;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 
 @Repository

@@ -25,7 +25,7 @@ public class ShareholderController {
         return ResponseEntity.ok(serviceShareholders.listAllShareholders());
     }
 
-    @GetMapping("search/{id}")
+    @GetMapping("searchbyid/{id}")
     public ResponseEntity<ShareholderGetModel> findShareholderById(@PathVariable String id){
 
         return ResponseEntity.ok(serviceShareholders.findShareholderByRegNo(id));
@@ -50,22 +50,22 @@ public class ShareholderController {
         return ResponseEntity.ok(serviceShareholders.updateShareHolder(updateModel));
     }
 
-    @GetMapping("search/{title}")
+    @GetMapping("searchbytitle/{title}")
     public ResponseEntity<ShareholderGetModel> findShareholderByTitle(@PathVariable String title){
         return ResponseEntity.ok(serviceShareholders.findShareholderByTitle(title));
     }
 
-    @GetMapping("search/{address}")
+    @GetMapping("searchbyaddress/{address}")
     public ResponseEntity<ShareholderGetModel> findShareholderByAddress(@PathVariable String address){
         return ResponseEntity.ok(serviceShareholders.findShareholderByAddress(address));
     }
 
-    @GetMapping("search/{phone}")
+    @GetMapping("searchbyphone/{phone}")
     public ResponseEntity<ShareholderGetModel> findShareholderByPhone(@PathVariable String phone){
         return ResponseEntity.ok(serviceShareholders.findShareholderByPhone(phone));
     }
 
-    @GetMapping("search/{type}")
+    @GetMapping("searchbytype/{type}")
     public ResponseEntity<List<ShareholderGetModel>> findShareholderByInvestorType(@PathVariable String type){
         return ResponseEntity.ok(serviceShareholders.findByInvestorType(type));
     }

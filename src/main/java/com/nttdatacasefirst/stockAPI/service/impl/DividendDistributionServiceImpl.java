@@ -83,7 +83,10 @@ public class DividendDistributionServiceImpl implements DividendDistributionServ
 
     @Override
     public List<DividendDistributionGetModel> getAllDividendDistribution() {
-        return mapperDividendDistribution.toModelGetList(repositoryDividendDistribution.findAll());
+        List<DividendDistribution> getAll = repositoryDividendDistribution.findAll();
+        if(getAll.isEmpty())
+            throw new DividendDistributionNotFoundException("There is no Dividend Distribution");
+        return mapperDividendDistribution.toModelGetList(getAll);
     }
 
     public List<DividendDistributionGetModel> getDividendDistrubitonByCapitalIncrease(Long arrNo){
