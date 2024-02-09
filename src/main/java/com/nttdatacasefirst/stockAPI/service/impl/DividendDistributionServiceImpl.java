@@ -36,9 +36,9 @@ public class DividendDistributionServiceImpl implements DividendDistributionServ
 
 
     @Override
-    public List<DividendDistribution> getDividendDistributionByCapitalIncrementArrNo(String arrNo) {
+    public List<DividendDistribution> getDividendDistributionByCapitalIncrementArrNo(Long arrNo) {
         List<DividendDistribution> getDiv  = repositoryDividendDistribution
-                .findByCapitalIncrease_ArrangementNo(Long.parseLong(arrNo));
+                .findByCapitalIncrease_ArrangementNo(arrNo);
 
         if(getDiv.isEmpty())
             throw new DividendDistributionNotFoundException("Dividend Distribution Not Found");

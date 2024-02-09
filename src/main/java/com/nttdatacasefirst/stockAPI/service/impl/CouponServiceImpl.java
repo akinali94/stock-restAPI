@@ -69,7 +69,9 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Coupon findNotUsedandMinDividendYear(Stock stock) {
-        return stock.getCouponList().stream().filter(x -> !x.isUsed()).min(Comparator.comparing(Coupon::getYearNo))
+        return stock.getCouponList().stream()
+                .filter(y -> y.getYearNo() != 0)
+                .filter(x -> !x.isUsed()).min(Comparator.comparing(Coupon::getYearNo))
                 .orElseThrow(() -> new CouponNotFoundException("Coupon Not Found"));
     }
 

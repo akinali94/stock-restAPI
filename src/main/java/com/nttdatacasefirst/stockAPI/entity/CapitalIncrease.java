@@ -1,6 +1,6 @@
 package com.nttdatacasefirst.stockAPI.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
@@ -16,9 +16,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "arrangementNo")*/
 public class CapitalIncrease {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long arrangementNo; //Tertip numarasi
     private int year;
     @Digits(integer = 15, fraction = 2)
@@ -30,10 +31,10 @@ public class CapitalIncrease {
     private BigDecimal capitalValue; //Eski sermaye degeri + bedelli + bedelsiz
     private BigDecimal residualValue; //Hisse senedinde kullanilmasi capitalValue'dan kalan deger.
     @OneToMany(mappedBy = "capitalIncrease")
-    @JsonManagedReference
+    @JsonBackReference
     private List<Stock> stockList;
     @OneToMany(mappedBy = "capitalIncrease")
-    @JsonManagedReference
+    @JsonBackReference
     private List<DividendDistribution> dividendDistributionList;
 
 }

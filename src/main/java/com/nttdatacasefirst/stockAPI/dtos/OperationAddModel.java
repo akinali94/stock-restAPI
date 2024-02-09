@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OperationAddModel {
     private String operationType;
-    private String arrangementNo;
+    private String StockID;
     private String shareholderNo;
 
 }

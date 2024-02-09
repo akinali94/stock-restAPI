@@ -1,6 +1,9 @@
 package com.nttdatacasefirst.stockAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.nttdatacasefirst.stockAPI.entity.enums.InvestorType;
 import com.nttdatacasefirst.stockAPI.entity.enums.converters.InvestorTypeConverter;
 import jakarta.persistence.*;
@@ -17,6 +20,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "registorNo")*/
 public class ShareHolder {
     @Id
     @Column(length = 8, unique = true)
@@ -28,11 +32,11 @@ public class ShareHolder {
     @Convert(converter = InvestorTypeConverter.class)
     private InvestorType investorType;
     @OneToMany(mappedBy = "shareHolder")
-    @JsonManagedReference
     @Column(nullable = true)
+    @JsonBackReference
     private List<Stock> stockList;
     @OneToMany(mappedBy = "shareHolder")
-    @JsonManagedReference
+    @JsonBackReference
     private List<Operation> operationList;
 
 }

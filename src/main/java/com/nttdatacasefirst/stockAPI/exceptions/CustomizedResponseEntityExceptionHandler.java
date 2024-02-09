@@ -144,6 +144,29 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NominalValueException.class)
+    public final ResponseEntity<ErrorDetails> handleNominalValueException(Exception ex, WebRequest request)
+        throws Exception{
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ShareholderandStockNotMatchException.class)
+    public final ResponseEntity<ErrorDetails> handleShareholderandStockNotMatchException(Exception ex, WebRequest request)
+        throws Exception{
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 
 
     protected ResponseEntity<Object> handleMethodArgumentNotValid(

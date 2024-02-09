@@ -5,7 +5,6 @@ import com.nttdatacasefirst.stockAPI.dtos.ShareholderAddModel;
 import com.nttdatacasefirst.stockAPI.dtos.ShareholderGetModel;
 import com.nttdatacasefirst.stockAPI.dtos.ShareholderUpdateModel;
 import com.nttdatacasefirst.stockAPI.entity.ShareHolder;
-import com.nttdatacasefirst.stockAPI.entity.Stock;
 import com.nttdatacasefirst.stockAPI.entity.enums.InvestorType;
 import com.nttdatacasefirst.stockAPI.exceptions.ShareholderAlreadyExistException;
 import com.nttdatacasefirst.stockAPI.exceptions.ShareholderNotFoundException;
@@ -151,10 +150,13 @@ public class ShareholderServiceImpl implements ShareholderService {
     }
 
     @Override
-    public ShareHolder getShareholderForOperations(String regNo) {
-        return repositoryShareholder.findById(Long.parseLong(regNo))
-                .orElseThrow(() -> new ShareholderNotFoundException("Shareholder Not Found"));
+    public ShareHolder findShareholderForOperations(String regNo) {
+        Long reg = Long.parseLong(regNo);
+        return repositoryShareholder.findByRegistorNo(reg).
+                orElseThrow(()
+                        -> new ShareholderNotFoundException("Shareholder Not Found when search for Operations"));
     }
+
 
 /*    @Override
     public void changeToNullWhenStockDelete(Stock stock){

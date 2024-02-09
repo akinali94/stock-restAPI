@@ -22,6 +22,8 @@ public interface StockService {
     StockGetModel deleteStockById(String id);
     void changeShareholderofStock(Stock stock, ShareHolder shareHolder);
 
+    Stock getStockById(String id);
+
     //Silinecek
     List<Stock> getAllStockEntity();
 }

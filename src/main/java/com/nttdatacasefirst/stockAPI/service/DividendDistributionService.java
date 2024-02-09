@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DividendDistributionService {
 
-    List<DividendDistribution> getDividendDistributionByCapitalIncrementArrNo(String arrNo);
+    List<DividendDistribution> getDividendDistributionByCapitalIncrementArrNo(Long arrNo);
 
     DividendDistributionGetModel addDividendDistribution(DividendDistributionAddModel addModel);
     List<DividendDistributionGetModel> getAllDividendDistribution();

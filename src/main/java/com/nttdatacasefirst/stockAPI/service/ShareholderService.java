@@ -18,5 +18,5 @@ public interface ShareholderService {
     List<ShareholderGetModel> haveStock();
     List<ShareholderGetModel> haveNotStock();
 
-    ShareHolder getShareholderForOperations(String regNo);
+    ShareHolder findShareholderForOperations(String regNo);
 }

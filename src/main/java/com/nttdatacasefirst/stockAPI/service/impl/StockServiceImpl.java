@@ -7,6 +7,7 @@ import com.nttdatacasefirst.stockAPI.entity.ShareHolder;
 import com.nttdatacasefirst.stockAPI.entity.Stock;
 import com.nttdatacasefirst.stockAPI.exceptions.CapitalIncreaseIsNotEnoughException;
 import com.nttdatacasefirst.stockAPI.exceptions.CapitalIncreaseNotFoundException;
+import com.nttdatacasefirst.stockAPI.exceptions.NominalValueException;
 import com.nttdatacasefirst.stockAPI.exceptions.StockNotFoundException;
 import com.nttdatacasefirst.stockAPI.mapper.MapperStock;
 import com.nttdatacasefirst.stockAPI.repository.StockRepository;
@@ -40,6 +41,8 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public StockGetModel addStock(StockAddModel addModel) {
+        if(addModel.getNominalValue().compareTo(new BigDecimal(0)) <= 0)
+            throw new NominalValueException("Nominal Value Cannot Be equal or Less Than Zero");
 
         //instantiate new Stock
         Stock newStock = new Stock();
@@ -176,6 +179,12 @@ public class StockServiceImpl implements StockService {
     @Override
     public void changeShareholderofStock(Stock stock, ShareHolder shareHolder){
         stock.setShareHolder(shareHolder);
+    }
+
+    @Override
+    public Stock getStockById(String id){
+        return repositoryStock.findById(Long.parseLong(id))
+                .orElseThrow(() -> new StockNotFoundException("Stock Not Found When trying to search by ID"));
     }
 
     //Silinecek

@@ -4,21 +4,20 @@ import com.nttdatacasefirst.stockAPI.dtos.OperationAddModel;
 import com.nttdatacasefirst.stockAPI.dtos.OperationGetModel;
 import com.nttdatacasefirst.stockAPI.entity.*;
 import com.nttdatacasefirst.stockAPI.entity.enums.OperationType;
+import com.nttdatacasefirst.stockAPI.exceptions.CapitalIncreaseNotFoundException;
 import com.nttdatacasefirst.stockAPI.exceptions.DividendDistributionNotFoundException;
 import com.nttdatacasefirst.stockAPI.exceptions.OperationNotFoundException;
+import com.nttdatacasefirst.stockAPI.exceptions.ShareholderNotFoundException;
 import com.nttdatacasefirst.stockAPI.mapper.MapperOperation;
 import com.nttdatacasefirst.stockAPI.repository.OperationRepository;
-import com.nttdatacasefirst.stockAPI.service.DividendDistributionService;
-import com.nttdatacasefirst.stockAPI.service.OperationService;
-import com.nttdatacasefirst.stockAPI.service.ShareholderService;
-import com.nttdatacasefirst.stockAPI.service.StockService;
+import com.nttdatacasefirst.stockAPI.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OperationServiceImpl implements OperationService {
@@ -27,67 +26,81 @@ public class OperationServiceImpl implements OperationService {
     private final StockService serviceStock;
     private final ShareholderService serviceShareholder;
     private final DividendDistributionService serviceDividendDistribution;
+    private final CapitalIncreaseService serviceCapitalIncrease;
 
     public OperationServiceImpl(@Autowired OperationRepository repositoryOperation,
                                 @Autowired MapperOperation mapperOperation,
                                 @Autowired StockService serviceStock,
                                 @Autowired ShareholderService serviceShareholder,
-                                @Autowired DividendDistributionService serviceDividendDistribution) {
+                                @Autowired DividendDistributionService serviceDividendDistribution,
+                                @Autowired CapitalIncreaseService serviceCapitalIncrease) {
         this.repositoryOperation = repositoryOperation;
         this.mapperOperation = mapperOperation;
         this.serviceStock = serviceStock;
         this.serviceShareholder = serviceShareholder;
         this.serviceDividendDistribution = serviceDividendDistribution;
+        this.serviceCapitalIncrease = serviceCapitalIncrease;
     }
 
     public OperationGetModel addOperation(OperationAddModel addModel){
-        //Find Stock by CapitalIncrease
-        List<Stock> stockList = serviceStock.getStocksofCapitalIncrement(addModel.getArrangementNo());
+        //Find Stock
+        Stock findStock = serviceStock.getStockById(addModel.getStockID());
         //Find Shareholder
-        ShareHolder findShareholder = serviceShareholder.getShareholderForOperations(addModel.getShareholderNo());
+        ShareHolder findShareholder = serviceShareholder.findShareholderForOperations(addModel.getShareholderNo());
+        //Find CapitalIncrease
+        CapitalIncrease capitalIncrease = serviceCapitalIncrease
+                .findCapitalIncrease(findStock.getCapitalIncrease().getArrangementNo())
+                .orElseThrow(() -> new CapitalIncreaseNotFoundException("Capital Increase Not Found in Operations"));
 
         //new Operation
         Operation newOperation = new Operation();
 
-        //Set OperationType
-        newOperation.setOperationType(OperationType.valueOf(addModel.getOperationType()));
-
         //Stock Operations
         if(addModel.getOperationType().equals("STOCK")){
-            Stock availableStock = serviceStock.getAvailableStockForStockOperation(stockList);
-            newOperation.setStock(availableStock);
+
+            newOperation.setOperationType(OperationType.valueOf(addModel.getOperationType()));
+            newOperation.setStock(findStock);
             newOperation.setDate(new Date());
             newOperation.setShareHolder(findShareholder);
 
             //Change coupon as used
-            serviceStock.changeCouponToUsedInStockOperation(availableStock);
+            serviceStock.changeCouponToUsedInStockOperation(findStock);
 
             //Set Shareholder of Stock
-            serviceStock.changeShareholderofStock(availableStock, findShareholder);
+            serviceStock.changeShareholderofStock(findStock, findShareholder);
         }
 
         //Dividend Operations
         if(addModel.getOperationType().equals("DIVIDEND")){
+
             //Check DividendDistribution
             List<DividendDistribution> div = serviceDividendDistribution
-                    .getDividendDistributionByCapitalIncrementArrNo(addModel.getArrangementNo());
+                    .getDividendDistributionByCapitalIncrementArrNo(capitalIncrease.getArrangementNo());
+            if(div.isEmpty())
+                throw new DividendDistributionNotFoundException("This capital Increase do not have any Dividend");
             //Find last DividendDistribution for this Capital Increase
             DividendDistribution maxSerialNoDividend = div.stream()
                     .max(Comparator.comparing(DividendDistribution::getSerialNo))
                     .orElseThrow(() ->
                             new DividendDistributionNotFoundException("Dividend Dist Not Found when search max Serial No"));
 
-            //Find available Stock
-            Stock availableStock = serviceStock.getAvailableStockForDividendOperation(stockList, findShareholder);
+            //Set DividendTotal
+            double division = (double) maxSerialNoDividend.getDividentRate() / 100;
+            BigDecimal getNominal = findStock.getNominalValue();
+            BigDecimal divRate = new BigDecimal(division);
+            BigDecimal divTotal = getNominal.multiply(divRate);
 
-            newOperation.setStock(availableStock);
+
+            newOperation.setOperationType(OperationType.valueOf(addModel.getOperationType()));
+
+            newOperation.setStock(findStock);
+            newOperation.setDividendDistribution(maxSerialNoDividend);
             newOperation.setDate(new Date());
             newOperation.setShareHolder(findShareholder);
             newOperation.setDividentYear(maxSerialNoDividend.getDividendYear());
-            newOperation.setDividendTotal(availableStock.getNominalValue().intValue() * maxSerialNoDividend.getDividentRate() / 100);
+            newOperation.setDividendTotal(divTotal);
 
-            serviceStock.changeShareholderofStock(availableStock, findShareholder);
-
+            serviceStock.changeCouponToUsedInDividdentOperation(findStock);
         }
 
         Operation createdOperation = repositoryOperation.save(newOperation);

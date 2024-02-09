@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Getter
@@ -17,6 +18,6 @@ public class OperationGetModel {
     private int stockSerialNo;
     private Date operationDate;
     private int dividentYear;
-    private int dividentTotal;
+    private BigDecimal dividentTotal;
     private String ShareholderTitle;
 }
