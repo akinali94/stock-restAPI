@@ -22,9 +22,11 @@ public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private CapitalIncrease capitalIncrease;
+
     private int serialNo; //seri no
 
     @Digits(integer = 15, fraction = 2)

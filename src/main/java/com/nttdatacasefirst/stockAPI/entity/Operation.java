@@ -25,18 +25,25 @@ public class Operation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
+
     @Convert(converter = OperationTypeConverter.class)
     private OperationType operationType;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private Stock stock;
+
     private Date date;
+
     private int dividentYear;
+
     private BigDecimal dividendTotal; //kar payi orani X nominal
+
     //hangi kar payi donemine ait oldugu
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private DividendDistribution dividendDistribution;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private ShareHolder shareHolder;
