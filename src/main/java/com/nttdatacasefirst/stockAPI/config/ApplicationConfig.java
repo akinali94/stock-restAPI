@@ -1,6 +1,7 @@
 package com.nttdatacasefirst.stockAPI.config;
 
 import com.nttdatacasefirst.stockAPI.repository.UserRepository;
+import com.nttdatacasefirst.stockAPI.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,7 @@ public class ApplicationConfig {
         }
          */
     }
+
 
     @Bean
     //This is data access object which is responsible to fectch the user details and also  encode paswords etc...

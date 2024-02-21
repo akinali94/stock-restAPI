@@ -3,6 +3,7 @@ package com.nttdatacasefirst.stockAPI.service.impl;
 
 import com.nttdatacasefirst.stockAPI.dtos.ShareholderAddModel;
 import com.nttdatacasefirst.stockAPI.dtos.ShareholderGetModel;
+import com.nttdatacasefirst.stockAPI.dtos.ShareholderRequestModel;
 import com.nttdatacasefirst.stockAPI.dtos.ShareholderUpdateModel;
 import com.nttdatacasefirst.stockAPI.entity.ShareHolder;
 import com.nttdatacasefirst.stockAPI.entity.enums.InvestorType;
@@ -12,9 +13,11 @@ import com.nttdatacasefirst.stockAPI.exceptions.ShareholderRegNoNullException;
 import com.nttdatacasefirst.stockAPI.mapper.MapperShareholder;
 import com.nttdatacasefirst.stockAPI.repository.ShareholderRepository;
 import com.nttdatacasefirst.stockAPI.service.ShareholderService;
+import com.nttdatacasefirst.stockAPI.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -39,7 +42,12 @@ public class ShareholderServiceImpl implements ShareholderService {
         if(checkShareholder != null)
             throw new ShareholderAlreadyExistException("Shareholder already exist");
 
-        ShareHolder newShareholder = mapperShareholder.toAdd(addModel);
+        ShareHolder newShareholder = new ShareHolder();
+        newShareholder.setRegistorNo(Long.parseLong(addModel.getRegNo()));
+        newShareholder.setTitle(addModel.getTitle() == null ? "null" : addModel.getTitle());
+        newShareholder.setPhoneNo(addModel.getPhoneNo() == null ? "null" : addModel.getPhoneNo());
+        newShareholder.setInvestorType(InvestorType.valueOf(addModel.getInvestorType() == null ? "NOTDETERMINED" : addModel.getInvestorType()));
+        newShareholder.setAddress(addModel.getAddress() == null ? "null" : addModel.getAddress());
 
         repositoryShareholder.save(newShareholder);
 
@@ -156,6 +164,17 @@ public class ShareholderServiceImpl implements ShareholderService {
                 orElseThrow(()
                         -> new ShareholderNotFoundException("Shareholder Not Found when search for Operations"));
     }
+
+    @Override
+    public ShareHolder addShareholderFromUser(ShareHolder shareholder){
+        return repositoryShareholder.save(shareholder);
+    }
+
+    @Override
+    public ShareHolder saveShareholder(ShareHolder shareholder){
+        return repositoryShareholder.save(shareholder);
+    }
+
 
 
 /*    @Override

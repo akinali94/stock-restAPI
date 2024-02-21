@@ -2,7 +2,7 @@ package com.nttdatacasefirst.stockAPI.entity.enums;
 
 public enum Role {
     USER(1L, "USER"),
-    ADMIN(1L, "ADMIN");
+    ADMIN(2L, "ADMIN");
 
     private final Long value;
     private final String label;

@@ -2,7 +2,8 @@ package com.nttdatacasefirst.stockAPI.entity.enums;
 
 public enum InvestorType {
     NATURALPERSON(1L, "NATURALPERSON"), //Gercek kisi
-    LEGALENTITY(2L, "LEGALENTITY"); //Tuzel kisi
+    LEGALENTITY(2L, "LEGALENTITY"), //Tuzel kisi
+    NOTDETERMINED(3L, "NOTDETERMINED"); //Secilmedi
 
     private final Long value;
     private final String label;

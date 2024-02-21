@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface MapperShareholder {
 
-    ShareHolder toAdd(ShareholderAddModel addModel);
-
     ShareHolder toUpdate(ShareholderUpdateModel updateModel);
 
     ShareholderGetModel toModelGet(ShareHolder shareHolder);

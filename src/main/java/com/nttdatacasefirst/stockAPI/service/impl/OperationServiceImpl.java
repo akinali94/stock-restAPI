@@ -2,13 +2,12 @@ package com.nttdatacasefirst.stockAPI.service.impl;
 
 import com.nttdatacasefirst.stockAPI.dtos.OperationAddModel;
 import com.nttdatacasefirst.stockAPI.dtos.OperationGetModel;
+import com.nttdatacasefirst.stockAPI.dtos.OperationUserGetModel;
 import com.nttdatacasefirst.stockAPI.entity.*;
 import com.nttdatacasefirst.stockAPI.entity.enums.OperationType;
-import com.nttdatacasefirst.stockAPI.exceptions.CapitalIncreaseNotFoundException;
-import com.nttdatacasefirst.stockAPI.exceptions.DividendDistributionNotFoundException;
-import com.nttdatacasefirst.stockAPI.exceptions.OperationNotFoundException;
-import com.nttdatacasefirst.stockAPI.exceptions.ShareholderNotFoundException;
+import com.nttdatacasefirst.stockAPI.exceptions.*;
 import com.nttdatacasefirst.stockAPI.mapper.MapperOperation;
+import com.nttdatacasefirst.stockAPI.mapper.MapperOperationUser;
 import com.nttdatacasefirst.stockAPI.repository.OperationRepository;
 import com.nttdatacasefirst.stockAPI.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +17,13 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OperationServiceImpl implements OperationService {
     private final OperationRepository repositoryOperation;
     private final MapperOperation mapperOperation;
+    private final MapperOperationUser mapperOperationUser;
     private final StockService serviceStock;
     private final ShareholderService serviceShareholder;
     private final DividendDistributionService serviceDividendDistribution;
@@ -30,12 +31,14 @@ public class OperationServiceImpl implements OperationService {
 
     public OperationServiceImpl(@Autowired OperationRepository repositoryOperation,
                                 @Autowired MapperOperation mapperOperation,
+                                @Autowired MapperOperationUser mapperOperationUser,
                                 @Autowired StockService serviceStock,
                                 @Autowired ShareholderService serviceShareholder,
                                 @Autowired DividendDistributionService serviceDividendDistribution,
                                 @Autowired CapitalIncreaseService serviceCapitalIncrease) {
         this.repositoryOperation = repositoryOperation;
         this.mapperOperation = mapperOperation;
+        this.mapperOperationUser = mapperOperationUser;
         this.serviceStock = serviceStock;
         this.serviceShareholder = serviceShareholder;
         this.serviceDividendDistribution = serviceDividendDistribution;
@@ -78,6 +81,7 @@ public class OperationServiceImpl implements OperationService {
                     .getDividendDistributionByCapitalIncrementArrNo(capitalIncrease.getArrangementNo());
             if(div.isEmpty())
                 throw new DividendDistributionNotFoundException("This capital Increase do not have any Dividend");
+
             //Find last DividendDistribution for this Capital Increase
             DividendDistribution maxSerialNoDividend = div.stream()
                     .max(Comparator.comparing(DividendDistribution::getSerialNo))
@@ -116,6 +120,30 @@ public class OperationServiceImpl implements OperationService {
             throw new OperationNotFoundException("There is no operation");
 
         return mapperOperation.toModelGetList(getAll);
+    }
+
+    @Override
+    public List<OperationGetModel> getOperationsOfShareholder(ShareHolder shareholder) {
+
+        return mapperOperation.toModelGetList(
+                repositoryOperation.findOperationByShareHolder(shareholder)
+        );
+    }
+
+    @Override
+    public OperationUserGetModel saveOperation(Operation operation) {
+
+        return mapperOperationUser.toModelGet(repositoryOperation.save(operation));
+    }
+
+    @Override
+    public List<OperationGetModel> getDividendOperationOfShareholder(ShareHolder shareHolder){
+        return mapperOperation.toModelGetList(
+                repositoryOperation.findOperationByShareHolder(shareHolder)
+                        .stream()
+                        .filter(x -> x.getOperationType().getLabel().equals("DIVIDEND"))
+                        .collect(Collectors.toList())
+        );
     }
 
 /*    @Override

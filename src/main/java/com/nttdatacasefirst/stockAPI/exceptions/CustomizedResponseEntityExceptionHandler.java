@@ -168,6 +168,42 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UserNotUpdatedException.class)
+    public final ResponseEntity<ErrorDetails> handleUserNotUpdated(Exception ex, WebRequest request)
+            throws Exception {
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @ExceptionHandler(OperationPerformedBeforeException.class)
+    public final ResponseEntity<ErrorDetails> handleOperationPerformedBefore(Exception ex, WebRequest request)
+            throws Exception {
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MailAlreadyRegisteredException.class)
+    public final ResponseEntity<ErrorDetails> handleMailAlreadyRegistered(Exception ex, WebRequest request)
+            throws Exception {
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
 
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,

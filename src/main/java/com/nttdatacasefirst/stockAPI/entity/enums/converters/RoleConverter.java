@@ -21,7 +21,7 @@ public class RoleConverter implements AttributeConverter<Role, Long> {
             return null;
         for(Role process: Role.values()){
             if(Objects.equals(process.getValue(), dbData))
-                return null;
+                return process;
         }
         return null;
     }

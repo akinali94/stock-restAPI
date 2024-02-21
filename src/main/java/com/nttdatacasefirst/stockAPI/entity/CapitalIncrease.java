@@ -26,9 +26,11 @@ public class CapitalIncrease {
     private BigDecimal rightIssue; //bedelli sermaye arttirimi
     @Digits(integer = 15, fraction = 2)
     private BigDecimal bonusIssue; //bedelsiz sermaye artirimi
+
     private int increasingRate; //Artirim orani
     @Digits(integer = 15, fraction = 2)
     private BigDecimal capitalValue; //Eski sermaye degeri + bedelli + bedelsiz
+    @Digits(integer = 15, fraction = 2)
     private BigDecimal residualValue; //Hisse senedinde kullanilmasi capitalValue'dan kalan deger.
     @OneToMany(mappedBy = "capitalIncrease")
     @JsonBackReference

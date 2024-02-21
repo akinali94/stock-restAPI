@@ -187,6 +187,14 @@ public class StockServiceImpl implements StockService {
                 .orElseThrow(() -> new StockNotFoundException("Stock Not Found When trying to search by ID"));
     }
 
+    @Override
+    public List<StockGetModel> getStocksofShareholder(Long regNo) {
+
+        return mapperStock.toModelGetList(
+                repositoryStock.findByShareHolder_RegistorNo(regNo)
+        );
+    }
+
     //Silinecek
     @Override
     public List<Stock> getAllStockEntity(){

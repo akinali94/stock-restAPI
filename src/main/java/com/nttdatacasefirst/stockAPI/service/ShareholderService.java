@@ -3,6 +3,7 @@ package com.nttdatacasefirst.stockAPI.service;
 import com.nttdatacasefirst.stockAPI.dtos.*;
 import com.nttdatacasefirst.stockAPI.entity.ShareHolder;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ShareholderService {
@@ -19,4 +20,9 @@ public interface ShareholderService {
     List<ShareholderGetModel> haveNotStock();
 
     ShareHolder findShareholderForOperations(String regNo);
+    ShareHolder addShareholderFromUser(ShareHolder shareholder);
+
+
+    ShareHolder saveShareholder(ShareHolder shareholder);
+
 }

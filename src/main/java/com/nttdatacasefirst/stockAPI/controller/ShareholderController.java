@@ -4,6 +4,7 @@ import com.nttdatacasefirst.stockAPI.dtos.*;
 import com.nttdatacasefirst.stockAPI.service.ShareholderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -79,5 +80,4 @@ public class ShareholderController {
     public ResponseEntity<List<ShareholderGetModel>> findShareholderHasNotStock(){
         return ResponseEntity.ok(serviceShareholders.haveNotStock());
     }
-
 }

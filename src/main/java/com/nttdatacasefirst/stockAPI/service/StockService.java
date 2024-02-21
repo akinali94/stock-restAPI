@@ -24,6 +24,8 @@ public interface StockService {
 
     Stock getStockById(String id);
 
+    List<StockGetModel> getStocksofShareholder(Long regNo);
+
     //Silinecek
     List<Stock> getAllStockEntity();
 }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.nttdatacasefirst.stockAPI.entity.enums.OperationType;
 import com.nttdatacasefirst.stockAPI.entity.enums.converters.OperationTypeConverter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,7 @@ public class Operation {
 
     private int dividentYear;
 
+    @Digits(integer = 15, fraction = 2)
     private BigDecimal dividendTotal; //kar payi orani X nominal
 
     //hangi kar payi donemine ait oldugu

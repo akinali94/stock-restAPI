@@ -12,17 +12,6 @@ import java.util.stream.Collectors;
 @Component
 public class MapperShareholderImpl implements MapperShareholder {
 
-    public ShareHolder toAdd(ShareholderAddModel addModel){
-        ShareHolder newShareholder = new ShareHolder();
-        newShareholder.setRegistorNo(Long.parseLong(addModel.getRegNo()));
-        newShareholder.setTitle(addModel.getTitle());
-        newShareholder.setPhoneNo(addModel.getPhoneNo());
-        newShareholder.setInvestorType(InvestorType.valueOf(addModel.getInvestorType()));
-        newShareholder.setAddress(addModel.getAddress());
-
-        return newShareholder;
-    }
-
     public ShareHolder toUpdate(ShareholderUpdateModel updateModel){
         ShareHolder newShareholder = new ShareHolder();
         newShareholder.setRegistorNo(updateModel.getRegNo());
